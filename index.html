@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Authing Hello World</title>
+  <style>
+    .btn {
+        background-color: #45bbee;
+        border: none;
+        border-radius: 4px;
+        padding: 5px 10px;
+        color: #fff;
+    }
+    .btn:hover {
+        background-color: #45aaff;
+        cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+    <div id="logout" style="display: none">
+        你已登录，用户名为：<span id="user"></span>。
+        <div>
+            完整用户信息：
+            <code id="userInfo"></code>
+        </div>
+        <button class="btn" id="out" style="margin-top:11px">退出</button>
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/authing-js-sdk"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+    <script src="https://cdn.authing.cn/sdk/javascript/authing-login-form-1.7.1.js"></script>
+
+    <script>
+        // Custom Codes
+        const form = new AuthingForm({
+            // 必填，client ID
+            clientId: '5cce4aa83ed9f97b4dfd95f0',
+            // 必填，timestamp
+            timestamp: Math.round(new Date() / 1000),
+            // 必填，nonce
+            nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
+            
+            title: '第一个应用' // 设置登录表单标题
+        });
+
+        form.on('authingLoad', async function(authing) {
+            // Authing 实例加载成功后的回调函数，参数 authing 为 authing 对象
+
+            const result = await authing.checkLoginStatus();
+            if (result.status) {
+                // 已登录，显示登录用户信息
+                form.hide();
+                showLoginStatus();
+            }
+
+            $('#out').click(async function() {
+                await authing.logout(localStorage.getItem('userId'));
+                alert('退出成功');
+                location.reload();
+            });
+        })
+
+
+        form.on('login', function(user) {
+            // 成功登录后的回调事件，参数 user 为用户数据
+        
+            localStorage.setItem('userInfo', JSON.stringify(user));
+            localStorage.setItem('userId', user._id); // 存储用户 id 到 localStorage 中
+            localStorage.setItem('username', user.username); // 存储用户 username 到 localStorage 中
+        
+            form.hide(); // 为了简单起见，这里在登录成功后直接隐藏表单，在 React 或 Vue 应用中，你可以执行路由跳转或其他业务
+            showLoginStatus();
+        });
+
+        const showLoginStatus = () => {
+            $('#logout').show();
+            $('#user').html(localStorage.getItem('username'));
+            $('#userInfo').html(localStorage.getItem('userInfo'));
+        }
+    </script>
+</body>
+</html>
