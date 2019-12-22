@@ -29,22 +29,18 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
-<script src="https://cdn.authing.cn/sdk/javascript/authing-login-form-1.7.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@authing/guard/dist/Guard.umd.min.js"></script>
 
 <script>
-// Custom Codes
-const form = new AuthingForm({
-    // 必填，client ID
-    clientId: '5cce4aa83ed9f97b4dfd95f0',
-    // 必填，timestamp
-    timestamp: Math.round(new Date() / 1000),
-    // 必填，nonce
-    nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
-    
-    title: '第一个应用' // 设置登录表单标题
+
+const form = new Guard('5de4cb712a7097f5e064533e', {
+  // 时间戳，不填则默认生成当前时间戳
+  timestamp: Math.round(new Date() / 1000),
+  // 随机数，不填则默认生成随机数
+  nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
 });
 
-form.on('authingLoad', async function(authing) {
+form.on('authing-load', async function(authing) {
     // Authing 实例加载成功后的回调函数，参数 authing 为 authing 对象
 
     // 使用 checkLoginStatus 方法判断当前的登录状态，需要使用 await
