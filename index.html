@@ -33,11 +33,24 @@
 
 <script>
 
-const form = new Guard('5de4cb712a7097f5e064533e', {
+const form = new Guard('5a9fa26cf8635a000185528c', {
   // 时间戳，不填则默认生成当前时间戳
   timestamp: Math.round(new Date() / 1000),
   // 随机数，不填则默认生成随机数
   nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
+
+  qrcodeScanning: {
+    redirect: false,
+  }
+});
+
+form.on('scanned-success', async function(user) {
+    localStorage.setItem('userInfo', JSON.stringify(user));
+    localStorage.setItem('userId', user._id); // 存储用户 id 到 localStorage 中
+    localStorage.setItem('username', user.username); // 存储用户 username 到 localStorage 中
+
+    form.hide(); // 为了简单起见，这里在登录成功后直接隐藏表单，在 React 或 Vue 应用中，你可以执行路由跳转或其他业务
+    showLoginStatus();
 });
 
 form.on('authing-load', async function(authing) {
@@ -64,7 +77,7 @@ form.on('authing-load', async function(authing) {
     });
 })
 
-form.on('login', function(user) {
+form.on('authenticated', function(user) {
     // 成功登录后的回调事件，参数 user 为用户数据
 
     localStorage.setItem('userInfo', JSON.stringify(user));
