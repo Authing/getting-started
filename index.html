@@ -29,7 +29,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
-<script src="https://cdn.jsdelivr.net/npm/@authing/guard@1.9.3/dist/Guard.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@authing/guard@1.9.10/dist/Guard.umd.min.js"></script>
 
 <script>
 
@@ -54,6 +54,7 @@ form.on('scanned-success', async function(user) {
 });
 
 form.on('authing-load', async function(authing) {
+    console.log(authing)
     // Authing 实例加载成功后的回调函数，参数 authing 为 authing 对象
 
     // 使用 checkLoginStatus 方法判断当前的登录状态，需要使用 await
