@@ -44,10 +44,15 @@ const form = new Guard('5a9fa26cf8635a000185528c', {
   }
 });
 
-form.on('scanned-success', async function(user) {
+function saveUserInfo(user){
     localStorage.setItem('userInfo', JSON.stringify(user));
     localStorage.setItem('userId', user._id); // 存储用户 id 到 localStorage 中
     localStorage.setItem('username', user.username); // 存储用户 username 到 localStorage 中
+    localStorage.setItem('token', user.token) // 存储用户 token 到 localStorage 中
+}
+
+form.on('scanned-success', async function(user) {
+    saveUserInfo(user)
 
     form.hide(); // 为了简单起见，这里在登录成功后直接隐藏表单，在 React 或 Vue 应用中，你可以执行路由跳转或其他业务
     showLoginStatus();
@@ -60,7 +65,8 @@ form.on('authing-load', async function(authing) {
     // 使用 checkLoginStatus 方法判断当前的登录状态，需要使用 await
     // 如已经登录则隐藏登录框并显示当前的用户信息
     // 这段代码的作用是用户如果已经登录，那么刷新后还可以看到自己的用户信息
-    const result = await authing.checkLoginStatus();
+    const token = localStorage.getItem('token')
+    const result = await authing.checkLoginStatus(token);
     if (result.status) {
         // 隐藏登录框
         form.hide();
@@ -81,9 +87,7 @@ form.on('authing-load', async function(authing) {
 form.on('authenticated', function(user) {
     // 成功登录后的回调事件，参数 user 为用户数据
 
-    localStorage.setItem('userInfo', JSON.stringify(user));
-    localStorage.setItem('userId', user._id); // 存储用户 id 到 localStorage 中
-    localStorage.setItem('username', user.username); // 存储用户 username 到 localStorage 中
+    saveUserInfo(user)
 
     form.hide(); // 为了简单起见，这里在登录成功后直接隐藏表单，在 React 或 Vue 应用中，你可以执行路由跳转或其他业务
     showLoginStatus();
