@@ -4,11 +4,7 @@
 
 ## 运行此程序
 
-``` shell
-$ http-server
-```
-
-访问：http://locahost:8080 即可。
+直接打开 `index.html` 即可
 
 ## 开发教程
 
