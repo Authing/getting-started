@@ -8,4 +8,4 @@
 
 ## 开发教程
 
-开发教程请参考：[Authing hello world](https://learn.authing.cn/authing/quickstart/hello-world)。
+开发教程请参考：[Authing hello world](https://docs.authing.cn/quickstart/hello-world.html)。
